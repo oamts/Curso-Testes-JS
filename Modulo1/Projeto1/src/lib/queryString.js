@@ -1,6 +1,4 @@
 module.exports.queryString = obj =>
   Object.entries(obj)
-    .map(([property, name]) => {
-      return `${property}=${name}`;
-    })
+    .map(([key, value]) => `${key}=${value}`)
     .join('&');
