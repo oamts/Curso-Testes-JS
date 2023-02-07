@@ -1,4 +1,4 @@
-const { queryString } = require('./queryString');
+const { queryString, parse } = require('./queryString');
 describe('Object to query string', () => {
   it('Should create a valid query string when a object is provided', () => {
     const obj = {
@@ -33,7 +33,22 @@ describe('Object to query string', () => {
     }).toThrowError();
   });
 });
-/*
-describe('Query string to object', ()=>{
 
-})*/
+describe('Query string to object', () => {
+  it('should convert a query sting into a object', () => {
+    const qs = 'name=Mateus&profession=Developer';
+
+    expect(parse(qs)).toEqual({
+      name: 'Mateus',
+      profession: 'Developer',
+    });
+  });
+
+  it('should convert a query sting of one key value pair into a object', () => {
+    const qs = 'name=Mateus';
+
+    expect(parse(qs)).toEqual({
+      name: 'Mateus',
+    });
+  });
+});
