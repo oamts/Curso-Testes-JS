@@ -21,3 +21,25 @@ exports[`cehckout() should return an object with the total and the list of items
   "total": 196392,
 }
 `;
+
+exports[`cehckout() should return an object with the total and the list of items when summary() is called 1`] = `
+{
+  "items": [
+    {
+      "product": {
+        "price": "35388",
+        "title": "shoes - men",
+      },
+      "quantity": 2,
+    },
+    {
+      "product": {
+        "price": "41872",
+        "title": "shoes - women",
+      },
+      "quantity": 3,
+    },
+  ],
+  "total": 196392,
+}
+`;
