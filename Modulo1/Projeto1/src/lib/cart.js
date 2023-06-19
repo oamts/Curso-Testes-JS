@@ -1,6 +1,7 @@
 import find from 'lodash/find';
 import remove from 'lodash/remove';
 import Dinero from 'dinero.js';
+import { re } from '@babel/core/lib/vendor/import-meta-resolve';
 
 const calculatePercentageDiscount = (amount, item) => {
   if (item.condition?.percentage && item.quantity > item.condition.minimum) {
@@ -15,6 +16,28 @@ const calculateQuantityDiscount = (amount, item) => {
     return amount.percentage(isEven ? 50 : 40);
   }
   return Money({ amount: 0 });
+};
+
+const calculateDiscount = (amount, quantity, condition) => {
+  const list = Array.isArray(condition) ? condition : [condition];
+
+  const [higherDiscount] = list
+    .map(cond => {
+      if (cond.percentage) {
+        return calculatePercentageDiscount(amount, {
+          condition: cond,
+          quantity,
+        }).getAmount();
+      } else if (cond.quantity) {
+        return calculateQuantityDiscount(amount, {
+          condition: cond,
+          quantity,
+        }).getAmount();
+      }
+    })
+    .sort((a, b) => b - a);
+
+  return Money({ amount: higherDiscount });
 };
 
 const Money = Dinero;
@@ -37,16 +60,21 @@ export default class Cart {
   remove(product) {
     remove(this.items, { product });
   }
+
   getTotal() {
     return this.items.reduce((acc, item) => {
       const amount = Money({ amount: item.quantity * item.product.price });
       let discount = Money({ amount: 0 });
 
-      if (item.condition?.percentage) {
+      if (item.condition) {
+        discount = calculateDiscount(amount, item.quantity, item.condition);
+      }
+
+      /*if (item.condition?.percentage) {
         discount = calculatePercentageDiscount(amount, item);
       } else if (item.condition?.quantity) {
         discount = calculateQuantityDiscount(amount, item);
-      }
+      }*/
 
       return acc.add(amount).subtract(discount);
     }, Money({ amount: 0 }));
