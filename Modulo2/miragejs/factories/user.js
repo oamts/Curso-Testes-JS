@@ -9,7 +9,7 @@ export default {
       return faker.person.fullName();
     },
     mobile() {
-      return faker.helpers.unique(faker.phone.number);
+      return faker.phone.number;
     },
     afterCreate(user, server) {
       const messages = server.createList('message', randomNumber(10), { user });
