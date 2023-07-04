@@ -6,6 +6,14 @@ import { cartState } from '@/state';
 describe('ProductCard - unit', () => {
   let server;
 
+  beforeEach(() => {
+    server = makeServer({ environment: 'test' });
+  });
+
+  afterEach(() => {
+    server.shutdown();
+  });
+
   const mountProductCard = () => {
     const product = server.create('product', {
       title: 'Relógio bonito',
@@ -22,14 +30,6 @@ describe('ProductCard - unit', () => {
       product,
     };
   };
-
-  beforeEach(() => {
-    server = makeServer({ environment: 'test' });
-  });
-
-  afterEach(() => {
-    server.shutdown();
-  });
 
   it('should match snapshot', () => {
     const { wrapper } = mountProductCard();
