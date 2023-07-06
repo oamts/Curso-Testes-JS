@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 import { makeServer } from '../../miragejs/server';
 
 context('Store', () => {
