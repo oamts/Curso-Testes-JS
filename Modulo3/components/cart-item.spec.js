@@ -31,4 +31,24 @@ describe('CartIem', () => {
     expect(image).toHaveProperty('src', product.image);
     expect(image).toHaveProperty('alt', product.title);
   });
+
+  it('should display 1 as initial quantity', () => {
+    renderCartItem();
+
+    expect(screen.getByTestId('quantity').textContent).toBe('1');
+  });
+
+  it('should increase quantity by 1 when second button is clicked', async () => {
+    renderCartItem();
+
+    const [_, button] = screen.getAllByRole('button');
+
+    await fireEvent.click(button);
+
+    expect(screen.getByTestId('quantity').textContent).toBe('2');
+  });
+
+  it.todo('should decrease quantity by 1 when first button is clicked');
+
+  it.todo('should not go below zero in the quantity');
 });
