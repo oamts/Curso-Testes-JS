@@ -38,17 +38,40 @@ describe('CartIem', () => {
     expect(screen.getByTestId('quantity').textContent).toBe('1');
   });
 
-  it('should increase quantity by 1 when second button is clicked', async () => {
+  it('should increase quantity by 1 when second button is clicked', () => {
     renderCartItem();
 
     const [_, button] = screen.getAllByRole('button');
 
-    await fireEvent.click(button);
+    fireEvent.click(button);
 
     expect(screen.getByTestId('quantity').textContent).toBe('2');
   });
 
-  it.todo('should decrease quantity by 1 when first button is clicked');
+  it('should decrease quantity by 1 when first button is clicked', () => {
+    renderCartItem();
 
-  it.todo('should not go below zero in the quantity');
+    const [buttonDecrease, buttonIncrease] = screen.getAllByRole('button');
+    const quantity = screen.getByTestId('quantity');
+
+    fireEvent.click(buttonIncrease);
+    expect(quantity.textContent).toBe('2');
+
+    fireEvent.click(buttonDecrease);
+    expect(quantity.textContent).toBe('1');
+  });
+
+  it('should not go below zero in the quantity', () => {
+    renderCartItem();
+
+    const [buttonDecrease] = screen.getAllByRole('button');
+    const quantity = screen.getByTestId('quantity');
+
+    expect(quantity.textContent).toBe('1');
+
+    fireEvent.click(buttonDecrease);
+    fireEvent.click(buttonDecrease);
+
+    expect(quantity.textContent).toBe('0');
+  });
 });
