@@ -1,18 +1,31 @@
 import ProductList from '../pages';
 import { screen, render, waitFor } from '@testing-library/react';
+import { makeServer } from '../miragejs/server';
 
 const renderProductList = () => {
   render(<ProductList />);
 };
 
 describe('ProductList', function () {
+  let server;
+
+  beforeEach(() => {
+    server = makeServer({ environment: 'test' });
+  });
+
+  afterEach(() => {
+    server.shutdown();
+  });
+
   it('should render ProductList', function () {
     renderProductList();
 
     expect(screen.getByTestId('product-list')).toBeInTheDocument();
   });
 
-  fit('should render the ProductCard component 10 times', async () => {
+  it('should render the ProductCard component 10 times', async () => {
+    server.createList('product', 10);
+
     renderProductList();
 
     await waitFor(() => {
@@ -20,7 +33,7 @@ describe('ProductList', function () {
     });
   });
 
-  it.todo('should render the no products message');
+  it.todo('should render the "no products message"');
   it.todo('should render the Search component');
   it.todo('should filter the product list when a search is performed');
   it.todo('should display error message when promise rejects');
