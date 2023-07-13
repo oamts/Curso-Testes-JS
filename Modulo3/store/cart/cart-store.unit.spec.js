@@ -29,31 +29,28 @@ describe('Cart Store', () => {
     expect(result.current.state.products).toHaveLength(0);
   });
 
-  it('should return an empty array for products on initial state', async () => {
+  it('should return an empty array for products on initial state', () => {
+    expect(Array.isArray(result.current.state.products)).toBe(true);
+    expect(result.current.state.products).toHaveLength(0);
+  });
+
+  it('should add 2 products to the list', async () => {
     const products = server.createList('product', 2);
-
-    const {
-      actions: { add },
-    } = result.current;
-
     for (const product of products) {
       act(() => add(product));
     }
-
     expect(result.current.state.products).toHaveLength(2);
   });
 
   it('should toggle open state', async () => {
-    const {
-      actions: { toggle },
-    } = result.current;
-
     expect(result.current.state.open).toBe(false);
+    expect(result.current.state.products).toHaveLength(0);
 
     act(() => toggle());
     expect(result.current.state.open).toBe(true);
 
     act(() => toggle());
     expect(result.current.state.open).toBe(false);
+    expect(result.current.state.products).toHaveLength(0);
   });
 });
