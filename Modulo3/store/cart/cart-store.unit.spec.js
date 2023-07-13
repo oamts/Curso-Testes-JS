@@ -4,24 +4,27 @@ import { makeServer } from '../../miragejs/server';
 
 describe('Cart Store', () => {
   let server;
+  let result;
+  let add;
+  let toggle;
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' });
+    result = renderHook(() => useCartStore()).result;
+    add = result.current.actions.add;
+    toggle = result.current.actions.toggle;
   });
 
   afterEach(() => {
     server.shutdown();
+    act(() => result.current.actions.reset());
   });
 
   it('should return open equals false on initial state', async () => {
-    const { result } = renderHook(() => useCartStore());
-
     expect(result.current.state.open).toBe(false);
   });
 
-  it('should return an empty array for products on initial state', () => {
-    const { result } = renderHook(() => useCartStore());
-
+  it('should add 2 products to the list', async () => {
     expect(Array.isArray(result.current.state.products)).toBe(true);
     expect(result.current.state.products).toHaveLength(0);
   });
@@ -29,7 +32,6 @@ describe('Cart Store', () => {
   it('should return an empty array for products on initial state', async () => {
     const products = server.createList('product', 2);
 
-    const { result } = renderHook(() => useCartStore());
     const {
       actions: { add },
     } = result.current;
@@ -42,7 +44,6 @@ describe('Cart Store', () => {
   });
 
   it('should toggle open state', async () => {
-    const { result } = renderHook(() => useCartStore());
     const {
       actions: { toggle },
     } = result.current;
