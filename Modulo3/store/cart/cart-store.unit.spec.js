@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useCartStore } from './';
 import { makeServer } from '../../miragejs/server';
+import { tr } from '@faker-js/faker';
 
 describe('Cart Store', () => {
   let server;
@@ -38,12 +39,13 @@ describe('Cart Store', () => {
     expect(result.current.state.products).toHaveLength(0);
   });
 
-  it('should add 2 products to the list', async () => {
+  it('should add 2 products to the list and open the cart', async () => {
     const products = server.createList('product', 2);
     for (const product of products) {
       act(() => add(product));
     }
     expect(result.current.state.products).toHaveLength(2);
+    expect(result.current.state.open).toBe(true);
   });
 
   it('should not add same product twice', () => {
