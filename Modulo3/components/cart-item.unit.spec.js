@@ -41,7 +41,7 @@ describe('CartIem', () => {
   it('should increase quantity by 1 when second button is clicked', () => {
     renderCartItem();
 
-    const [_, button] = screen.getAllByRole('button');
+    const button = screen.getByTestId('increase');
 
     fireEvent.click(button);
 
@@ -51,7 +51,8 @@ describe('CartIem', () => {
   it('should decrease quantity by 1 when first button is clicked', () => {
     renderCartItem();
 
-    const [buttonDecrease, buttonIncrease] = screen.getAllByRole('button');
+    const buttonIncrease = screen.getByTestId('increase');
+    const buttonDecrease = screen.getByTestId('decrease');
     const quantity = screen.getByTestId('quantity');
 
     fireEvent.click(buttonIncrease);
@@ -64,7 +65,7 @@ describe('CartIem', () => {
   it('should not go below zero in the quantity', () => {
     renderCartItem();
 
-    const [buttonDecrease] = screen.getAllByRole('button');
+    const buttonDecrease = screen.getByTestId('decrease');
     const quantity = screen.getByTestId('quantity');
 
     expect(quantity.textContent).toBe('1');
