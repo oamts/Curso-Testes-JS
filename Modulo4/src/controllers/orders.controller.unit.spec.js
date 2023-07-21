@@ -7,6 +7,7 @@ import {
   buildRes,
 } from 'test/builders';
 import * as validator from 'express-validator';
+import { StatusCodes } from 'http-status-codes';
 import { create, index, validate } from './orders.controller';
 import { validationResponse } from './utils';
 
@@ -87,7 +88,7 @@ describe('Controllers > Orders', () => {
     }).toThrowError('Please provide a valid method name');
   });
 
-  fit('should return status 200 and the created order id', async () => {
+  it('should return status 200 and the created order id', async () => {
     const products = buildOrder();
     const req = buildReq({
       body: { products },
